@@ -60,6 +60,7 @@
       this.data = data;
 
       this.renderInMenu();
+      this.initAccordion();
     }
 
     renderInMenu() {
@@ -68,6 +69,25 @@
 
       const menuContainer = document.querySelector(select.containerOf.menu);
       menuContainer.appendChild(this.element);
+    }
+
+    initAccordion() {
+      const clickableTrigger = this.element.querySelector(
+        select.menuProduct.clickable
+      );
+
+      clickableTrigger.addEventListener('click', event => {
+        event.preventDefault();
+
+        const activeProduct = document.querySelector(
+          select.all.menuProductsActive
+        );
+        if (activeProduct && activeProduct !== this.element) {
+          activeProduct.classList.remove(classNames.menuProduct.wrapperActive);
+        }
+
+        this.element.classList.toggle(classNames.menuProduct.wrapperActive);
+      });
     }
   }
 
