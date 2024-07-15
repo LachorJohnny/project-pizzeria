@@ -60,6 +60,7 @@
       this.data = data;
 
       this.renderInMenu();
+      this.getElements();
       this.initAccordion();
     }
 
@@ -71,12 +72,20 @@
       menuContainer.appendChild(this.element);
     }
 
-    initAccordion() {
-      const clickableTrigger = this.element.querySelector(
+    getElements() {
+      this.accordionTrigger = this.element.querySelector(
         select.menuProduct.clickable
       );
+      this.form = this.element.querySelector(select.menuProduct.form);
+      this.formInputs = this.form.querySelectorAll(select.all.formInputs);
+      this.cartButton = this.element.querySelector(
+        select.menuProduct.cartButton
+      );
+      this.priceElem = this.element.querySelector(select.menuProduct.priceElem);
+    }
 
-      clickableTrigger.addEventListener('click', event => {
+    initAccordion() {
+      this.accordionTrigger.addEventListener('click', event => {
         event.preventDefault();
 
         const activeProduct = document.querySelector(
