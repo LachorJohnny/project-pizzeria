@@ -74,7 +74,7 @@ dataSource.products = {
           standard: {label: 'standard', price: 0, default: true},
           thin: {label: 'thin', price: 2},
           thick: {label: 'thick', price: 2},
-          cheese: {label: 'cheese in edges', price: 5},
+          cheese: {label: 'cheese in edges', price: 5, default: false},
           wholewheat: {label: 'wholewheat', price: 3},
           gluten: {label: 'with extra gluten', price: 0},
         },

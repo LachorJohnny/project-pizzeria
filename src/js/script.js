@@ -62,6 +62,8 @@
       this.renderInMenu();
       this.getElements();
       this.initAccordion();
+      this.initOrderForm();
+      this.processForm();
     }
 
     renderInMenu() {
@@ -97,6 +99,54 @@
 
         this.element.classList.toggle(classNames.menuProduct.wrapperActive);
       });
+    }
+
+    initOrderForm() {
+      this.form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        this.processForm();
+      });
+
+      for (const input of this.formInputs) {
+        input.addEventListener('change', () => {
+          this.processForm();
+        });
+      }
+
+      this.cartButton.addEventListener('click', event => {
+        event.preventDefault();
+
+        this.processForm();
+      });
+    }
+
+    processForm() {
+      const formData = utils.serializeFormToObject(this.form);
+
+      let price = this.data.price;
+
+      if (this.data.params) {
+        for (const paramId in this.data.params) {
+          const param = this.data.params[paramId];
+
+          for (const optionId in param.options) {
+            const option = param.options[optionId];
+
+            if (formData[paramId] && formData[paramId].includes(optionId)) {
+              if (!option.default) {
+                price += option.price;
+              }
+            } else {
+              if (option.default) {
+                price -= option.price;
+              }
+            }
+          }
+        }
+      }
+
+      this.priceElem.innerHTML = price;
     }
   }
 
