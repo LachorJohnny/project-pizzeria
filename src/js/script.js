@@ -84,6 +84,9 @@
         select.menuProduct.cartButton
       );
       this.priceElem = this.element.querySelector(select.menuProduct.priceElem);
+      this.imageWrapper = this.element.querySelector(
+        select.menuProduct.imageWrapper
+      );
     }
 
     initAccordion() {
@@ -133,14 +136,22 @@
           for (const optionId in param.options) {
             const option = param.options[optionId];
 
+            const img = this.imageWrapper.querySelector(
+              `img[class~="${paramId}-${optionId}"]`
+            );
+
             if (formData[paramId] && formData[paramId].includes(optionId)) {
               if (!option.default) {
                 price += option.price;
               }
+
+              img && img.classList.add('active');
             } else {
               if (option.default) {
                 price -= option.price;
               }
+
+              img && img.classList.remove('active');
             }
           }
         }
