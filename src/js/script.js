@@ -63,6 +63,7 @@
       this.getElements();
       this.initAccordion();
       this.initOrderForm();
+      this.initAmountWidget();
       this.processForm();
     }
 
@@ -86,6 +87,9 @@
       this.priceElem = this.element.querySelector(select.menuProduct.priceElem);
       this.imageWrapper = this.element.querySelector(
         select.menuProduct.imageWrapper
+      );
+      this.amountWidgetElem = this.element.querySelector(
+        select.menuProduct.amountWidget
       );
     }
 
@@ -145,19 +149,88 @@
                 price += option.price;
               }
 
-              img && img.classList.add('active');
+              img && img.classList.add(classNames.menuProduct.imageVisible);
             } else {
               if (option.default) {
                 price -= option.price;
               }
 
-              img && img.classList.remove('active');
+              img && img.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
         }
       }
 
+      price *= this.amountWidget.value;
+
       this.priceElem.innerHTML = price;
+    }
+
+    initAmountWidget() {
+      this.amountWidget = new AmountWidget(this.amountWidgetElem);
+
+      this.amountWidgetElem.addEventListener('updated', () => {
+        this.processForm();
+      });
+    }
+  }
+
+  class AmountWidget {
+    constructor(element) {
+      this.element = element;
+
+      this.getElements();
+      this.initActions();
+      this.setValue(this.input.value);
+    }
+
+    getElements() {
+      this.input = this.element.querySelector(select.widgets.amount.input);
+      this.linkDecrease = this.element.querySelector(
+        select.widgets.amount.linkDecrease
+      );
+      this.linkIncrease = this.element.querySelector(
+        select.widgets.amount.linkIncrease
+      );
+    }
+
+    initActions() {
+      this.input.addEventListener('change', () => {
+        this.setValue(this.input.value);
+      });
+
+      this.linkDecrease.addEventListener('click', event => {
+        event.preventDefault();
+
+        this.setValue(--this.input.value);
+      });
+
+      this.linkIncrease.addEventListener('click', event => {
+        event.preventDefault();
+
+        this.setValue(++this.input.value);
+      });
+    }
+
+    announce() {
+      const event = new Event('updated');
+      this.element.dispatchEvent(event);
+    }
+
+    setValue(value) {
+      const newValue = parseInt(value);
+
+      if (newValue !== this.value && !isNaN(newValue)) {
+        if (
+          newValue <= settings.amountWidget.defaultMax &&
+          newValue > settings.amountWidget.defaultMin
+        ) {
+          this.value = newValue;
+          this.announce();
+        }
+      }
+
+      this.input.value = this.value;
     }
   }
 
