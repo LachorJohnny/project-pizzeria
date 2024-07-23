@@ -105,25 +105,31 @@
     }
 
     getElements() {
-      this.accordionTrigger = this.element.querySelector(
+      this.dom = {};
+
+      this.dom.accordionTrigger = this.element.querySelector(
         select.menuProduct.clickable
       );
-      this.form = this.element.querySelector(select.menuProduct.form);
-      this.formInputs = this.form.querySelectorAll(select.all.formInputs);
-      this.cartButton = this.element.querySelector(
+      this.dom.form = this.element.querySelector(select.menuProduct.form);
+      this.dom.formInputs = this.dom.form.querySelectorAll(
+        select.all.formInputs
+      );
+      this.dom.cartButton = this.element.querySelector(
         select.menuProduct.cartButton
       );
-      this.priceElem = this.element.querySelector(select.menuProduct.priceElem);
-      this.imageWrapper = this.element.querySelector(
+      this.dom.priceElem = this.element.querySelector(
+        select.menuProduct.priceElem
+      );
+      this.dom.imageWrapper = this.element.querySelector(
         select.menuProduct.imageWrapper
       );
-      this.amountWidgetElem = this.element.querySelector(
+      this.dom.amountWidgetElem = this.element.querySelector(
         select.menuProduct.amountWidget
       );
     }
 
     initAccordion() {
-      this.accordionTrigger.addEventListener('click', event => {
+      this.dom.accordionTrigger.addEventListener('click', event => {
         event.preventDefault();
 
         const activeProduct = document.querySelector(
@@ -138,19 +144,19 @@
     }
 
     initOrderForm() {
-      this.form.addEventListener('submit', event => {
+      this.dom.form.addEventListener('submit', event => {
         event.preventDefault();
 
         this.processForm();
       });
 
-      for (const input of this.formInputs) {
+      for (const input of this.dom.formInputs) {
         input.addEventListener('change', () => {
           this.processForm();
         });
       }
 
-      this.cartButton.addEventListener('click', event => {
+      this.dom.cartButton.addEventListener('click', event => {
         event.preventDefault();
 
         this.processForm();
@@ -158,7 +164,7 @@
     }
 
     processForm() {
-      const formData = utils.serializeFormToObject(this.form);
+      const formData = utils.serializeFormToObject(this.dom.form);
 
       let price = this.data.price;
 
@@ -169,7 +175,7 @@
           for (const optionId in param.options) {
             const option = param.options[optionId];
 
-            const img = this.imageWrapper.querySelector(
+            const img = this.dom.imageWrapper.querySelector(
               `img[class~="${paramId}-${optionId}"]`
             );
 
@@ -192,13 +198,13 @@
 
       price *= this.amountWidget.value;
 
-      this.priceElem.innerHTML = price;
+      this.dom.priceElem.innerHTML = price;
     }
 
     initAmountWidget() {
-      this.amountWidget = new AmountWidget(this.amountWidgetElem);
+      this.amountWidget = new AmountWidget(this.dom.amountWidgetElem);
 
-      this.amountWidgetElem.addEventListener('updated', () => {
+      this.dom.amountWidgetElem.addEventListener('updated', () => {
         this.processForm();
       });
     }
@@ -214,30 +220,32 @@
     }
 
     getElements() {
-      this.input = this.element.querySelector(select.widgets.amount.input);
-      this.linkDecrease = this.element.querySelector(
+      this.dom = {};
+
+      this.dom.input = this.element.querySelector(select.widgets.amount.input);
+      this.dom.linkDecrease = this.element.querySelector(
         select.widgets.amount.linkDecrease
       );
-      this.linkIncrease = this.element.querySelector(
+      this.dom.linkIncrease = this.element.querySelector(
         select.widgets.amount.linkIncrease
       );
     }
 
     initActions() {
-      this.input.addEventListener('change', () => {
-        this.setValue(this.input.value);
+      this.dom.input.addEventListener('change', () => {
+        this.setValue(this.dom.input.value);
       });
 
-      this.linkDecrease.addEventListener('click', event => {
+      this.dom.linkDecrease.addEventListener('click', event => {
         event.preventDefault();
 
-        this.setValue(--this.input.value);
+        this.setValue(--this.dom.input.value);
       });
 
-      this.linkIncrease.addEventListener('click', event => {
+      this.dom.linkIncrease.addEventListener('click', event => {
         event.preventDefault();
 
-        this.setValue(++this.input.value);
+        this.setValue(++this.dom.input.value);
       });
     }
 
@@ -259,7 +267,7 @@
         }
       }
 
-      this.input.value = this.value;
+      this.dom.input.value = this.value;
     }
   }
 
