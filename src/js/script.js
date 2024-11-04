@@ -360,6 +360,9 @@
       this.dom.totalNumber = this.dom.wrapper.querySelector(
         select.cart.totalNumber
       );
+      this.dom.form = this.dom.wrapper.querySelector(select.cart.form);
+      this.dom.phone = this.dom.form.querySelector(select.cart.phone);
+      this.dom.address = this.dom.form.querySelector(select.cart.address);
     }
 
     initActions() {
@@ -371,6 +374,12 @@
 
       this.dom.productList.addEventListener('remove', event => {
         this.remove(event.detail.cartProduct);
+      });
+
+      this.dom.form.addEventListener('submit', event => {
+        event.preventDefault();
+
+        this.sendOrder();
       });
     }
 
@@ -388,20 +397,20 @@
     update() {
       const deliveryFee = settings.cart.defaultDeliveryFee;
 
-      let totalNumber = 0;
-      let subtotalPrice = 0;
+      this.totalNumber = 0;
+      this.subtotalPrice = 0;
 
       for (const product of this.products) {
-        totalNumber += product.amount;
-        subtotalPrice += product.price;
+        this.totalNumber += product.amount;
+        this.subtotalPrice += product.price;
       }
 
-      this.totalPrice = totalNumber
-        ? subtotalPrice + deliveryFee
-        : subtotalPrice;
+      this.totalPrice = this.totalNumber
+        ? this.subtotalPrice + deliveryFee
+        : this.subtotalPrice;
 
-      this.dom.totalNumber.textContent = totalNumber;
-      this.dom.subtotalPrice.textContent = subtotalPrice;
+      this.dom.totalNumber.textContent = this.totalNumber;
+      this.dom.subtotalPrice.textContent = this.subtotalPrice;
       this.dom.deliveryFee.textContent = deliveryFee;
       this.dom.totalPrice.forEach(totalPriceRef => {
         totalPriceRef.textContent = this.totalPrice;
@@ -415,6 +424,34 @@
       cartProduct.element.remove();
 
       this.update();
+    }
+
+    sendOrder() {
+      const url = settings.db.url + '/' + settings.db.orders;
+
+      const payload = {};
+
+      payload.address = this.dom.address.value;
+      payload.phone = this.dom.phone.value;
+      payload.totalPrice = this.totalPrice;
+      payload.subtotalPrice = this.subtotalPrice;
+      payload.totalNumber = this.totalNumber;
+      payload.deliveryFee = settings.cart.defaultDeliveryFee;
+      payload.products = [];
+
+      for (const prod of this.products) {
+        payload.products.push(prod.getData());
+      }
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      };
+
+      fetch(url, options);
     }
   }
 
@@ -481,6 +518,17 @@
       });
 
       this.dom.wrapper.dispatchEvent(event);
+    }
+
+    getData() {
+      return {
+        id: this.id,
+        amount: this.amount,
+        price: this.price,
+        priceSingle: this.priceSingle,
+        name: this.name,
+        params: this.params,
+      };
     }
   }
 
