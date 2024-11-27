@@ -1,6 +1,7 @@
 import { select, settings, classNames } from './settings.js';
 import Product from './modules/Product.js';
 import Cart from './modules/Cart.js';
+import Booking from './modules/Booking.js';
 
 export const app = {
   initMenu: function () {
@@ -24,16 +25,24 @@ export const app = {
     const pages = document.querySelector(select.containerOf.pages);
 
     nav.forEach(link => {
-      link.addEventListener('click', e => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
         const href = link.getAttribute('href').substring(1);
 
-        const activePage = pages.querySelector('.' + classNames.nav.active);
+        const activePage = pages.querySelector(
+          'section.' + classNames.nav.active
+        );
         activePage.classList.remove(classNames.nav.active);
 
         const pageToActivate = pages.querySelector(`[id^="${href}"]`);
         pageToActivate.classList.add(classNames.nav.active);
       });
     });
+  },
+
+  initBooking: function () {
+    const bookingContainer = document.querySelector(select.containerOf.booking);
+    const booking = new Booking(bookingContainer); //eslint-disable-line
   },
 
   initData: function () {
@@ -61,6 +70,7 @@ export const app = {
     thisApp.initData();
     thisApp.initCart();
     thisApp.initNav();
+    thisApp.initBooking();
   },
 };
 
