@@ -4,6 +4,46 @@ import Cart from './modules/Cart.js';
 import Booking from './modules/Booking.js';
 
 export const app = {
+  initPages: function () {
+    this.pages = document.querySelector(select.containerOf.pages).children;
+    this.navLinks = document.querySelectorAll(select.nav.links);
+
+    const idFromHash = window.location.hash.replace('#', '');
+    let pageMatchingHash = this.pages[0].id;
+
+    for (const page of this.pages) {
+      if (page.id === idFromHash) {
+        pageMatchingHash = page.id;
+      }
+    }
+
+    this.activePage(pageMatchingHash);
+
+    for (const link of this.navLinks) {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+
+        const id = event.target.getAttribute('href').replace('#', '');
+
+        this.activePage(id);
+        window.location.hash = `#${id}`;
+      });
+    }
+  },
+
+  activePage: function (pageId) {
+    for (const page of this.pages) {
+      page.classList.toggle(classNames.nav.active, page.id === pageId);
+    }
+
+    for (const link of this.navLinks) {
+      link.classList.toggle(
+        classNames.nav.active,
+        link.getAttribute('href') === `#${pageId}`
+      );
+    }
+  },
+
   initMenu: function () {
     const thisApp = this;
 
@@ -18,26 +58,6 @@ export const app = {
   initCart: function () {
     const cartElem = document.querySelector(select.containerOf.cart);
     this.cart = new Cart(cartElem);
-  },
-
-  initNav: function () {
-    const nav = document.querySelectorAll(select.nav.links);
-    const pages = document.querySelector(select.containerOf.pages);
-
-    nav.forEach(link => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const href = link.getAttribute('href').substring(1);
-
-        const activePage = pages.querySelector(
-          'section.' + classNames.nav.active
-        );
-        activePage.classList.remove(classNames.nav.active);
-
-        const pageToActivate = pages.querySelector(`[id^="${href}"]`);
-        pageToActivate.classList.add(classNames.nav.active);
-      });
-    });
   },
 
   initBooking: function () {
@@ -67,9 +87,9 @@ export const app = {
   init: function () {
     const thisApp = this;
 
+    thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
-    thisApp.initNav();
     thisApp.initBooking();
   },
 };
