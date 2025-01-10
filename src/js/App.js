@@ -1,4 +1,5 @@
 import { select, settings, classNames } from './settings.js';
+import Home from './modules/Home.js';
 import Product from './modules/Product.js';
 import Cart from './modules/Cart.js';
 import Booking from './modules/Booking.js';
@@ -62,7 +63,7 @@ export const app = {
 
   initBooking: function () {
     const bookingContainer = document.querySelector(select.containerOf.booking);
-    const booking = new Booking(bookingContainer); //eslint-disable-line
+    this.booking = new Booking(bookingContainer);
   },
 
   initData: function () {
@@ -84,12 +85,18 @@ export const app = {
       });
   },
 
+  initHome: function () {
+    const homeWrapper = document.querySelector(select.containerOf.home);
+    this.home = new Home(homeWrapper);
+  },
+
   init: function () {
     const thisApp = this;
 
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
+    thisApp.initHome();
     thisApp.initBooking();
   },
 };

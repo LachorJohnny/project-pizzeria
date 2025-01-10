@@ -3,8 +3,10 @@ export const select = {
     menuProduct: '#template-menu-product',
     cartProduct: '#template-cart-product',
     bookingWidget: '#template-booking-widget',
+    homepage: '#template-homepage',
   },
   containerOf: {
+    home: '.home-wrapper',
     menu: '#product-list',
     cart: '#cart',
     pages: '#pages',
@@ -71,6 +73,9 @@ export const select = {
   nav: {
     links: '.main-nav a',
   },
+  homepage: {
+    mainCarousel: '.main-carousel',
+  },
 };
 
 export const classNames = {
@@ -134,4 +139,38 @@ export const templates = {
   bookingWidget: Handlebars.compile(
     document.querySelector(select.templateOf.bookingWidget).innerHTML
   ),
+  homepage: Handlebars.compile(
+    document.querySelector(select.templateOf.homepage).innerHTML
+  ),
+};
+
+export const homepageData = {
+  carouselData: [
+    {
+      img: 'images/homepage/pizza-3.jpg',
+      title: 'Lorem ipsum',
+      text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquam, ab. Quos, praesentium.',
+      author: 'Jane Doe',
+    },
+    {
+      img: 'images/homepage/pizza-3.jpg',
+      title: 'Voluptate',
+      text: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vero perspiciatis facere reiciendis alias maxime esse voluptatibus.',
+      author: 'Eric Johnson',
+    },
+    {
+      img: 'images/homepage/pizza-3.jpg',
+      title: 'Vero perspiciatis',
+      text: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptate facere quisquam minus dolore.',
+      author: 'Lina Monroe',
+    },
+  ],
+  galleryImageLinks: [
+    'images/homepage/pizza-4.jpg',
+    'images/homepage/pizza-5.jpg',
+    'images/homepage/pizza-6.jpg',
+    'images/homepage/pizza-7.jpg',
+    'images/homepage/pizza-8.jpg',
+    'images/homepage/pizza-9.jpg',
+  ],
 };
